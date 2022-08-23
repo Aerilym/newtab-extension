@@ -1,0 +1,12 @@
+{
+  "name": "newtab",
+  "version": "1.0",
+  "description": "New tab extension",
+  "author": "Ryan Miller",
+  "license": "ISC",
+  "scripts": {
+    "deploy": "yarn zip"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

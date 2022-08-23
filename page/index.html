@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <title>New Tab</title>
+  </head>
+  <body>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .neo {
+        border-radius: 33px;
+        background: #7e589d;
+        box-shadow: 15px 15px 30px #755292, -15px -15px 30px #875ea8;
+        transition: all 0.3s ease-in-out;
+      }
+      .neo:hover {
+        transform: scale(0.95, 0.95);
+      }
+      .neo:after {
+        box-shadow: inset 15px 15px 30px #755292, inset -15px -15px 30px #875ea8;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+      .neo:hover::after {
+        opacity: 1;
+      }
+      .neoin {
+        border-radius: 33px;
+        background: #7e589d;
+        box-shadow: inset 15px 15px 30px #755292, inset -15px -15px 30px #875ea8;
+      }
+      .container {
+        width: fit-content;
+        height: fit-content;
+        padding: 20px;
+        justify-content: center;
+        align-items: center;
+      }
+      .row {
+        display: flex;
+        flex-direction: row;
+      }
+      .col {
+        display: flex;
+        flex-direction: column;
+      }
+      .sc-holder {
+        width: 85px;
+        height: 85px;
+        margin: 6px;
+      }
+      .icon {
+        width: 60px;
+        height: 60px;
+        opacity: 0.95;
+        border-style: none;
+        border: 0;
+      }
+      .sc-link {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+      }
+      .event {
+        margin: 4px;
+      }
+    </style>
+    <div id="shortcuts" class="neoin container col"></div>
+      
+    <script src="shortcuts.js"></script>
+    <script src="index.js"></script>
+
+  </body>
+</html>
