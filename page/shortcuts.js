@@ -1,5 +1,6 @@
 function loadShortcuts(shortcuts) {
   let shortcutContainer = document.getElementById('shortcuts');
+  removeAllChildNodes(shortcutContainer);
   let rows = Math.sqrt(shortcuts.length) - 1;
   if (rows < 1) {
     rows = 1;
@@ -49,4 +50,10 @@ function loadShortcuts(shortcuts) {
     itemNumber++;
   }
   shortcutContainer.appendChild(rowContainer);
+}
+
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
 }

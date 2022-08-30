@@ -2,7 +2,6 @@
   <head>
     <title>New Tab</title>
     <link rel="icon" type="image/x-icon" href="assets/icons/icon.png" />
-
     <style>
       /* Fade in animation */
       body {
@@ -10,6 +9,7 @@
         animation-iteration-count: 1;
         animation-fill-mode: forwards;
         background-size: cover;
+        background-color: black;
       }
       html {
         overflow: auto;
@@ -32,6 +32,11 @@
         overflow-y: auto;
         overflow-x: hidden;
       }
+      button {
+        border-radius: 33px;
+        background: #7e589d;
+        box-shadow: inset 15px 15px 30px #755292, inset -15px -15px 30px #875ea8;
+      }
       @keyframes fadeInAnimation {
         0% {
           opacity: 0;
@@ -43,6 +48,11 @@
     </style>
   </head>
   <body>
+    <div style="position: absolute">
+      <button id="add">+</button>
+      <button id="reset">R</button>
+    </div>
+
     <iframe id="frame"> Your browser doesn't support iframes </iframe>
     <script src="index.js"></script>
   </body>

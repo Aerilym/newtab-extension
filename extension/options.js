@@ -3,14 +3,12 @@ function save_options() {
   const targetUrl = document.getElementById('targetUrl').value;
   const backgroundUrl = document.getElementById('backgroundUrl').value;
   const redirectNoLoad = document.getElementById('redirectNoLoad').checked;
-  const userShortcuts = document.getElementById('userShortcuts').value;
 
   chrome.storage.sync.set(
     {
       targetUrl: targetUrl,
       backgroundUrl: backgroundUrl,
       redirectNoLoad: redirectNoLoad,
-      userShortcuts: userShortcuts,
     },
     function () {
       // Update status to let user know options were saved.
@@ -32,13 +30,12 @@ function restore_options() {
       targetUrl: 'http://localhost:8080/',
       backgroundUrl: 'assets/backgrounds/jwst.jpg',
       redirectNoLoad: true,
-      userShortcuts: [],
+      shortcuts: [],
     },
     function (items) {
       document.getElementById('targetUrl').value = items.targetUrl;
       document.getElementById('backgroundUrl').value = items.backgroundUrl;
       document.getElementById('redirectNoLoad').checked = items.redirectNoLoad;
-      document.getElementById('userShortcuts').value = items.userShortcuts;
     },
   );
 }
