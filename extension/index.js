@@ -70,11 +70,24 @@ if (redirectNoLoad === true) {
 function addShortcut() {
   chrome.storage.sync.get(['shortcuts'], function (options) {
     let shortcuts = options.shortcuts;
-    shortcuts.push(new Shortcut('Reddit', 'https://www.reddit.com', true, ''));
+    shortcuts.push(new Shortcut('New Shortcut', 'https://aerilym.com', true, ''));
     chrome.storage.sync.set({ shortcuts: shortcuts }, function () {
       frameSource.postMessage(shortcuts, '*');
     });
     manageShortcuts();
+  });
+}
+
+function moveShortcut(from, to) {
+  chrome.storage.sync.get(['shortcuts'], function (options) {
+    let shortcuts = options.shortcuts;
+    const fromShortcut = shortcuts[from];
+    shortcuts.splice(from, 1);
+    shortcuts.splice(to, 0, fromShortcut);
+    chrome.storage.sync.set({ shortcuts: shortcuts }, function () {
+      frameSource.postMessage(shortcuts, '*');
+      manageShortcuts();
+    });
   });
 }
 
@@ -125,19 +138,38 @@ function toggleOptions() {
 
 function filterUrl(url) {
   url = url.replace(/^https?:\/\//, '');
+  url = url.replace(/^www\./, '');
+  url = url.replace(/\/$/, '');
   return url;
 }
 
 function manageShortcuts() {
   chrome.storage.sync.get(['shortcuts'], function (options) {
     let shortcuts = options.shortcuts;
-    console.log(shortcuts);
     const shortcutsContainer = document.getElementById('options-shortcut-list');
     removeAllChildNodes(shortcutsContainer);
+
+    const shortcutHeader = document.createElement('div');
+    shortcutHeader.className = 'shortcut-list-item shortcut-header';
+    shortcutHeader.innerHTML = `
+  <div class="shortcut-title">Name</div>
+
+  <div class="shortcut-url">URL</div>
+  `;
+
+    shortcutsContainer.appendChild(shortcutHeader);
     shortcuts.forEach((shortcut) => {
       const shortcutContainer = document.createElement('div');
       shortcutContainer.className = 'shortcut-list-item';
       shortcutContainer.innerHTML = `
+      <div class="shortcut-move-up shortcut-item-button">
+        <img src="assets/icons/arrow-up.svg">
+      </div>
+      <div class="shortcut-move-up-placeholder shortcut-item-button" style="display: none;"></div>
+      <div class="shortcut-move-down shortcut-item-button">
+        <img src="assets/icons/arrow-down.svg">
+      </div>
+      <div class="shortcut-move-down-placeholder shortcut-item-button" style="display: none;"></div>
       <div class="shortcut-title">${shortcut.title}</div>
       <input class="shortcut-title" type="text" value="${
         shortcut.title
@@ -148,22 +180,39 @@ function manageShortcuts() {
         shortcut.url
       }" style="display: none;"></input>
 
-      <div class="shortcut-save" style="display: none;">
-        <img src="assets/icons/save.svg">
-      </div>
+      <div class="shortcut-item-button-container">
+        <div class="shortcut-save shortcut-item-button" style="display: none;">
+          <img src="assets/icons/check.svg">
+        </div>
 
-      <div class="shortcut-discard" style="display: none;">
-        <img src="assets/icons/discard.svg">
-      </div>
+        <div class="shortcut-discard shortcut-item-button" style="display: none;">
+          <img src="assets/icons/discard.svg">
+        </div>
 
-      <div class="shortcut-edit">
-        <img src="assets/icons/edit.svg">
-      </div>
+        <div class="shortcut-edit shortcut-item-button">
+          <img src="assets/icons/edit.svg">
+        </div>
 
-      <div class="shortcut-delete">
-        <img src="assets/icons/delete.svg">
+        <div class="shortcut-delete shortcut-item-button">
+          <img src="assets/icons/delete.svg">
+        </div>
       </div>
-    `;
+      `;
+
+      const moveUp = shortcutContainer.getElementsByClassName('shortcut-move-up')[0];
+      const moveDown = shortcutContainer.getElementsByClassName('shortcut-move-down')[0];
+      const moveUpPlaceholder = shortcutContainer.getElementsByClassName(
+        'shortcut-move-up-placeholder',
+      )[0];
+      const moveDownPlaceholder = shortcutContainer.getElementsByClassName(
+        'shortcut-move-down-placeholder',
+      )[0];
+
+      const shortcutIdx = shortcuts.indexOf(shortcut);
+
+      const isFirst = shortcutIdx === 0;
+      const isLast = shortcutIdx === shortcuts.length - 1;
+
       shortcutContainer.getElementsByClassName('shortcut-edit')[0].addEventListener('click', () => {
         const shortcutEdit = shortcutContainer.getElementsByClassName('shortcut-edit')[0];
         const shortcutDelete = shortcutContainer.getElementsByClassName('shortcut-delete')[0];
@@ -204,6 +253,18 @@ function manageShortcuts() {
             manageShortcuts();
           });
         });
+
+        shortcutDiscard.addEventListener('click', () => {
+          manageShortcuts();
+        });
+      });
+
+      moveUp.addEventListener('click', () => {
+        moveShortcut(shortcuts.indexOf(shortcut), shortcuts.indexOf(shortcut) - 1);
+      });
+
+      moveDown.addEventListener('click', () => {
+        moveShortcut(shortcuts.indexOf(shortcut), shortcuts.indexOf(shortcut) + 1);
       });
 
       shortcutContainer
@@ -211,6 +272,17 @@ function manageShortcuts() {
         .addEventListener('click', () => {
           deleteShortcut(shortcuts.indexOf(shortcut));
         });
+
+      if (isFirst) {
+        moveUp.style.display = 'none';
+        moveUpPlaceholder.style.display = 'block';
+      }
+
+      if (isLast) {
+        moveDown.style.display = 'none';
+        moveDownPlaceholder.style.display = 'block';
+      }
+
       shortcutsContainer.appendChild(shortcutContainer);
     });
   });
