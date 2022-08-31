@@ -32,10 +32,48 @@
         overflow-y: auto;
         overflow-x: hidden;
       }
-      button {
+      .neo {
         border-radius: 33px;
         background: #7e589d;
         box-shadow: inset 15px 15px 30px #755292, inset -15px -15px 30px #875ea8;
+      }
+      .btn {
+        display: inline-block;
+        width: fit-content;
+        height: fit-content;
+        background-size: cover;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+      }
+      .icon {
+        width: 20px;
+        height: 20px;
+        opacity: 0.95;
+        border-style: none;
+        border: 0;
+        padding: 4px;
+      }
+      .container {
+        width: fit-content;
+        height: fit-content;
+        padding: 5%;
+      }
+      .shortcut-list-item{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: fit-content;
+        padding: 5px;
+        border-radius: 5px;
+        background-color: #f5f5f5;
+        margin-bottom: 5px;
+      }
+      .shortcut-delete{
+        height: 10px;
+        width: 10px;
       }
       @keyframes fadeInAnimation {
         0% {
@@ -49,8 +87,16 @@
   </head>
   <body>
     <div style="position: absolute">
-      <button id="add">+</button>
-      <button id="reset">R</button>
+      <div id="options-toggle" class="btn neo"><img class="icon" src="assets/icons/gear.svg"></img></div>
+      <div id="options-container" class="neo container" style="display: none;">
+        <iframe src="options.html"></iframe>
+        <h3>Manage Shortcuts</h3>
+        <div id="options-shortcut-list">
+
+        </div>
+        <div id="add-shortcut" class="btn neo"><img class="icon" src="assets/icons/add.svg"></img></div>
+        <div id="reset-shortcuts" class="btn neo"><img class="icon" src="assets/icons/reset.svg"></img></div>
+      </div>
     </div>
 
     <iframe id="frame"> Your browser doesn't support iframes </iframe>
